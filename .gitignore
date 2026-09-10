@@ -16,5 +16,18 @@
 DNI*
 *_DNI*
 
-# The article itself: third-party PDF, fetch it from arXiv
+# Source papers and extracted working text
 paper/*.pdf
+papers/*.pdf
+paper/*.txt
+papers/*.txt
+course.pdf
+nber.pdf
+
+# Python and build products
+__pycache__/
+*.pyc
+.venv/
+*.xdv
+*.vrb
+*.bak

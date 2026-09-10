@@ -1,0 +1,5 @@
+* text=auto
+*.png binary
+*.pdf binary
+# Preserve the supplied raw prompt's line endings and intentional trailing space.
+prompts.md -text whitespace=-blank-at-eol

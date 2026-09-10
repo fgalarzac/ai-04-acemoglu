@@ -1,0 +1,79 @@
+{
+  "purpose": "Illustration of AKO Figures 1 and 2; not a new result or proof",
+  "baseline": {
+    "alpha": 1.2,
+    "tau_a": 0.0,
+    "prior_precision": 0.5,
+    "lambda_i": 1.0,
+    "lambda_g": 1.0,
+    "island_size": 1000.0,
+    "drift_variance": 1.0,
+    "delta_x": 1.0,
+    "delta_g": 0.0
+  },
+  "tau_a_critical": 0.0669779008996462,
+  "critical_x": 0.23575576129925177,
+  "initial_conditions": [
+    0.02,
+    0.8
+  ],
+  "periods": 3000,
+  "alpha_cases": [
+    {
+      "alpha": 1.4,
+      "positive_fixed_points": [
+        0.9769918226999357
+      ]
+    },
+    {
+      "alpha": 1.25,
+      "positive_fixed_points": [
+        0.8803278274186369
+      ]
+    },
+    {
+      "alpha": 1.2,
+      "positive_fixed_points": [
+        0.0415929046906759,
+        0.6032695984097336
+      ]
+    }
+  ],
+  "tau_cases": [
+    {
+      "tau_a": 0,
+      "positive_fixed_points": [
+        0.0415929046906759,
+        0.6032695984097336
+      ],
+      "terminal_X": [
+        0.0004115790233554738,
+        0.6032695984097327
+      ]
+    },
+    {
+      "tau_a": 0.05023342567473465,
+      "positive_fixed_points": [
+        0.1136505122500098,
+        0.40538237657727083
+      ],
+      "terminal_X": [
+        0.0003768389846349868,
+        0.40538237657727233
+      ]
+    },
+    {
+      "tau_a": 0.08372237612455774,
+      "positive_fixed_points": [],
+      "terminal_X": [
+        0.0003643527782455106,
+        0.00038550685745153304
+      ]
+    }
+  ],
+  "validation": {
+    "max_log_FOC_residual": 3.8546943414985435e-13,
+    "critical_peak_residual": -2.531308496145357e-13,
+    "checks": "FOC, corner, map bounds and monotonicity, AI crowd-out, root counts passed"
+  }
+}
