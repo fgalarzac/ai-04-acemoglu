@@ -1,0 +1,114 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usetheme{default}
+\usecolortheme{seahorse}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamerfont{frametitle}{size=\large}
+
+\title{Aouad, Lykouris \& Zhong (2026)}
+\subtitle{\emph{Human-AI Productivity Paradoxes} --- Section 2}
+\author{Alexander Quispe}
+\date{Repository 1 \textperiodcentered{} Week of August 17--22}
+
+\begin{document}
+
+%================= PORTADA (con el enlace al repositorio) =============
+\begin{frame}[plain]
+  \titlepage
+  \begin{center}\small
+    \texttt{github.com/alexanderquispe/ai-01-aouad}
+  \end{center}
+\end{frame}
+
+%================= 1. EL ART\'ICULO ====================================
+\begin{frame}{1 \textperiodcentered{} The paper and the agent's problem}
+  \textbf{Question.} When does AI assistance make a worker \emph{less} productive?
+
+  \medskip
+  \textbf{The single mechanism.} AI is a \emph{perfectly substitutable input}:
+  skill, effort and assistance enter production only through their sum.
+  \[ x \;=\; s + e + a \]
+
+  \medskip
+  \textbf{The agent's problem.} Choose effort $e$ to maximise output net of a
+  \emph{linear} cost:
+  \[ \max_{e \ge 0}\; p(s+e+a) \;-\; \gamma e \]
+
+  \smallskip
+  \begin{itemize}\small
+    \item $p$ weakly increasing, concave, twice differentiable; $\gamma>0$.
+    \item Only constraint: $e \ge 0$ --- and it binds. That is the whole result.
+  \end{itemize}
+\end{frame}
+
+%================= 2. EL RESULTADO ===================================
+\begin{frame}{2 \textperiodcentered{} Proposition 2.1, with all its conditions}
+  Define $x^{*}$ as the \emph{largest} maximiser of $p(x)-\gamma x$:
+  \[ x^{*} \;=\; \max\,\arg\max_{x}\;\bigl[\,p(x)-\gamma x\,\bigr] \]
+
+  \textbf{Regularity condition} (without it $x^{*}$ need not exist):
+  \[ \limsup_{x\to\infty} \frac{p(x)}{x} \;<\; \gamma \]
+
+  \medskip
+  \textbf{Then}
+  \[ e^{*}(s,a) = \bigl(x^{*}-s-a\bigr)_{+}, \qquad
+     p^{*}(s,a) = \max\bigl\{\,p(x^{*}),\; p(s+a)\,\bigr\} \]
+
+  \medskip
+  \footnotesize\emph{Intuition.} The agent has one target level of total input;
+  he tops it up with effort, and once skill plus AI already reach it he simply
+  stops working.
+\end{frame}
+
+%================= 3. LO QUE HICE ====================================
+\begin{frame}{3 \textperiodcentered{} What I did}
+  \textbf{Reproduced} Proposition 2.1 by hand --- the interior-versus-corner
+  split, with no differentiation in the proof (\texttt{hand/}).
+
+  \medskip
+  \textbf{Assumptions I considered relaxing}
+  \begin{itemize}\small
+    \item \textbf{Linear cost $\to$ convex.} \emph{Dead end}: the authors already
+      do it in Appendix D (Props. D.3, D.6). Replication, not extension.
+    \item \textbf{Myopia.} A two-period agent who internalises skill dynamics.
+      Never relaxed anywhere in the paper --- this is the live one.
+    \item \textbf{Complementarity inside $p(\cdot)$} rather than as an added
+      interaction term. Harder: \S{}4.4 and \S{}5.3 partly pre-empt it.
+  \end{itemize}
+
+  \medskip
+  \textbf{Also produced} a full step-by-step tutorial of the paper and two
+  lecture decks (\texttt{extra/}).
+\end{frame}
+
+%================= 4. LA IA =========================================
+\begin{frame}{4 \textperiodcentered{} Where I did not believe the AI}
+  \textbf{What I asked.} ``What is the most natural extension of this model?''
+
+  \medskip
+  \textbf{What the model answered.} Relax the linear cost $c(e)=\gamma e$ to a
+  strictly convex $c(e)$ --- presented confidently as an open direction.
+
+  \medskip
+  \textbf{My verdict: \textcolor{red}{incorrect as an extension}.}
+  \begin{itemize}\small
+    \item Appendix D is titled \emph{``Extension to convex cost functions''} and
+      redoes Sections 2--4 under strictly convex cost.
+    \item So the proposal is already in the paper. I checked the appendix
+      directly rather than taking the answer at face value.
+    \item \emph{Caveat worth keeping:} Appendix D covers \S\S{}2--4 but \textbf{not}
+      \S{}5, so convex cost applied to the skill-polarisation result is genuinely
+      untouched.
+  \end{itemize}
+
+  \medskip
+  \footnotesize The step I re-derived by hand is in \texttt{hand/} --- I did not
+  trust the algebra of the first-order condition until I had written it out.
+\end{frame}
+
+\end{document}
