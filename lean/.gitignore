@@ -1,6 +1,8 @@
 source-audited*
 *.pdf
 !docs/DependencyDAG.pdf
+# Rendered presentation deliverable requested for the repository.
+!formalization_presentation.pdf
 *.aux
 *.log
 *.fls
