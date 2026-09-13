@@ -1,0 +1,6 @@
++ lake build +QX26AgenticDelegation.PaperInterface
+Build completed successfully (755 jobs).
++ git diff --check -- papers/QX26AgenticDelegation papers/QX26AgenticDelegation.lean lakefile.toml ':(exclude)papers/QX26AgenticDelegation/source/'
+warning: in the working copy of 'lakefile.toml', LF will be replaced by CRLF the next time Git touches it
+
+Exit code: 0
