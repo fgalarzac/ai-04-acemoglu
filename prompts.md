@@ -340,3 +340,7 @@ Cobwebs display the first 70 steps; time paths display all 3,000 with log scales
 The FOC is solved in log effort with bracketed roots. `erf` evaluates $G$ accurately near zero. A log flow-balance residual locates positive fixed points and the maximum defining the numerical threshold; a grid precedes peak refinement. This is numerical root-finding, not the appendix proof. Checks cover FOC residuals, the zero corner, bounded and increasing $F$, AI crowd-out, and root counts. Raw results are saved in `figures/results.json`. Initial exploratory $I=100$ had no positive branch in the elastic regime and was rejected for this illustration; it is not evidence against Proposition 5, which allows $\tau_A^c=0$.
 
 ````
+
+## User
+
+Finalmente, en la carperta Lean crea una presentación en pdf de lo hallado. Esta debe de tener al menos una diapositiva con la formalización. Por otro lado, actualiza la parte de promts a este último.

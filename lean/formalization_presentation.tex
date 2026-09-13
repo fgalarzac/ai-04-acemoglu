@@ -1,0 +1,169 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+
+\definecolor{ink}{HTML}{203550}
+\definecolor{teal}{HTML}{008783}
+\definecolor{codebg}{HTML}{F3F6F8}
+\definecolor{codecomment}{HTML}{5B6B73}
+\setbeamercolor{frametitle}{fg=ink}
+\setbeamercolor{structure}{fg=teal}
+\setbeamercolor{normal text}{fg=ink,bg=white}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{\hfill\scriptsize QX26AgenticDelegation\quad\insertframenumber/\inserttotalframenumber\hspace{4mm}\vspace{2mm}}
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+
+\newcommand{\src}[1]{\vfill{\tiny\color{gray}#1}}
+\newenvironment{leancode}{%
+  \begin{beamercolorbox}[sep=1.2ex,wd=\textwidth]{block body}%
+  \color{ink}\ttfamily\scriptsize
+}{\end{beamercolorbox}}
+\title{Formalización parcial de la dinámica de conocimiento}
+\subtitle{AI, Human Cognition and Knowledge Collapse}
+\author{fgalarzac\quad |\quad EconCSLib}
+\date{Acemoglu, Kong \& Ozdaglar (2026)\quad NBER WP 34910}
+
+\begin{document}
+
+\begin{frame}[plain]
+  \titlepage
+  \centering
+  \small Carpeta de trabajo: \texttt{QX26AgenticDelegation}
+  \medskip
+
+  \scriptsize Formalización generada y auditada con el flujo de EconCSLib.\
+  El resultado se reporta como parcial.
+\end{frame}
+
+\begin{frame}{1. Qué se encontró en el artículo}
+  \begin{columns}[T]
+    \column{.56\textwidth}
+    \textbf{Inventario de fuente}
+    \begin{itemize}
+      \item 30 presentaciones nombradas.
+      \item Assumptions 1--2.
+      \item Observations 1--2 y Propositions 1--16.
+      \item Lemmas 1--2, A-1--A-5 y B-1--B-3.
+    \end{itemize}
+    \column{.40\textwidth}
+    \textbf{Resultado de la corrida}
+    \begin{itemize}
+      \item Una frontera formalizada.
+      \item Recurrencia de Proposition 1.
+      \item Existencia y unicidad probadas.
+      \item Estado final: \textbf{parcial}.
+    \end{itemize}
+  \end{columns}
+  \medskip
+  \textbf{Fuente fijada:} NBER Working Paper 34910, febrero de 2026.
+  \src{SOURCE\_INVENTORY.md; FINAL\_VALIDATION\_REPORT.md.}
+\end{frame}
+
+\begin{frame}{2. La frontera matemática formalizada}
+  En equilibrio simétrico, el esfuerzo agregado es $E_t=I e_t$. La precisión
+  heredada sigue la recurrencia mostrada en Proposition 1:
+  \[
+    X_{t+1}
+      =\left[\Sigma^2+
+        \frac{1}{X_t+\lambda_G I e_t}\right]^{-1}.
+  \]
+  EconCSLib representa el estado como el par $(X_t,e_t)$ y define
+  \[
+    (X_{t+1},e_{t+1})
+      =\operatorname{dynamicTransition}(X_t,e_t),
+      \qquad e_{t+1}=e(X_{t+1},\tau_A).
+  \]
+  \begin{block}{Alcance exacto}
+    Una vez fijadas la condición inicial y la función de esfuerzo no negativa,
+    existe una única trayectoria que satisface la recurrencia.
+  \end{block}
+  \src{MainTheorems.lean; paper Proposition 1, pp. 17--18.}
+\end{frame}
+
+\begin{frame}{3. Formalización Lean: el Spec de Proposition 1}
+\begin{leancode}
+def paper\_proposition1\_dynamic\_recurrenceSpec : Prop :=\\
+\quad $\forall$ (X1 SigmaSq lambdaG aggregation tauA : $\mathbb R$)\\
+\qquad (effort : $\mathbb R\to\mathbb R\to\mathbb R$),\\
+\quad $0\le X1\to$\\
+\quad ($\forall$ X, $0\le$ effort X tauA) $\to$\\
+\quad $\exists!$ path : $\mathbb N\to\mathbb R\times\mathbb R$,\\
+\qquad IsDynamicRecurrence X1 SigmaSq lambdaG aggregation tauA effort path
+\end{leancode}
+  \begin{itemize}
+    \item El \texttt{Spec} es transparente y constituye la superficie revisable.
+    \item \texttt{existsUnique} exige una sola trayectoria para los parámetros dados.
+    \item La hipótesis visible exige esfuerzo no negativo.
+  \end{itemize}
+  \src{PaperInterface.lean: paper\_proposition1\_dynamic\_recurrenceSpec.}
+\end{frame}
+
+\begin{frame}{4. Endpoint probado y estructura de la prueba}
+\begin{leancode}
+theorem paper\_proposition1\_dynamic\_recurrence :\\
+\quad paper\_proposition1\_dynamic\_recurrenceSpec := by\\
+\quad unfold paper\_proposition1\_dynamic\_recurrenceSpec\\
+\quad intro X1 SigmaSq lambdaG aggregation tauA\\
+\qquad effort \_ effort\_nonnegative\\
+\quad exact dynamicRecurrence\_existsUnique X1 SigmaSq\\
+\qquad lambdaG aggregation tauA effort effort\_nonnegative
+\end{leancode}
+  \begin{center}
+    \small
+    \texttt{dynamicTransition} $\Longrightarrow$
+    \texttt{IsDynamicRecurrence}\par\smallskip
+    $\Longrightarrow$ \texttt{dynamicRecurrence\_existsUnique}
+    $\Longrightarrow$ \texttt{ProofInterface}
+  \end{center}
+  La existencia se construye con recursión sobre $\mathbb N$. La unicidad se
+  prueba por inducción: dos trayectorias con el mismo estado inicial y la misma
+  transición coinciden en cada periodo.
+  \src{MainTheorems.lean; ProofInterface.lean.}
+\end{frame}
+
+\begin{frame}{5. Validación mecánica}
+  \begin{columns}[T]
+    \column{.48\textwidth}
+    \begin{block}{Chequeo del paper}
+      \centering
+      \texttt{paper\_contribution.py check}\par\smallskip
+      \Large\textbf{Exit code 0}\par\smallskip
+      \normalsize 755 trabajos compilados
+    \end{block}
+    \column{.48\textwidth}
+    \begin{block}{Endpoint exacto}
+      \centering
+      \texttt{lake build ProofInterface}\par\smallskip
+      \Large\textbf{Exit code 0}\par\smallskip
+      \normalsize 756 trabajos compilados
+    \end{block}
+  \end{columns}
+  \medskip
+  El endpoint tiene exactamente el tipo del \texttt{Spec}; no contiene
+  \texttt{sorry}. Los archivos de auditoría, estado y trazabilidad permanecen
+  dentro de la carpeta.
+  \src{FAST\_CHECK\_RESULT.txt; PROOF\_BUILD\_RESULT.txt; audit/.}
+\end{frame}
+
+\begin{frame}{6. Resultado honesto y trabajo pendiente}
+  \textbf{Probado:}
+  \begin{itemize}
+    \item existencia y unicidad de la trayectoria de la recurrencia determinista;
+    \item no negatividad del componente de esfuerzo, dada la hipótesis sobre
+      la función de mejor respuesta.
+  \end{itemize}
+  \textbf{No probado todavía:}
+  \begin{itemize}
+    \item existencia y unicidad del Perfect Bayesian Equilibrium simétrico;
+    \item las otras 29 presentaciones nombradas;
+    \item equivalencia semántica completa entre el paper y toda la clausura Lean;
+    \item revisión independiente y cierre v11 completo.
+  \end{itemize}
+  \begin{alertblock}{Conclusión}
+    La corrida certifica una pieza precisa de Proposition 1. No constituye una
+    formalización completa del artículo ni del equilibrio económico.
+  \end{alertblock}
+  \src{FINAL\_VALIDATION\_REPORT.md; status.json.}
+\end{frame}
+
+\end{document}
